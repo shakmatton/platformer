@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class MovePlayer2D : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private Animator animator;
 
     private float movimentoX;
     private float velocidadeAtual;
@@ -11,11 +12,13 @@ public class MovePlayer2D : MonoBehaviour
     public float speed = 5f;
     public float jumpForce = 10f;
 
-    public bool noChao = false;
+    private bool noChao = false;
+
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         velocidadeAtual = speed;
     }
 
@@ -43,7 +46,35 @@ public class MovePlayer2D : MonoBehaviour
     private void FixedUpdate()
     {
         rb.linearVelocity = new Vector2(movimentoX * velocidadeAtual, rb.linearVelocity.y);
+        AtualizarAnimacao();
     }
+
+    private void AtualizarAnimacao()
+    {
+        if (noChao)
+        {
+            if (movimentoX == 0)
+            {
+                animator.Play("Player_Idle");
+            }
+            else if (velocidadeAtual > speed)   // distingue andar de correr
+            {
+                animator.Play("Player_Run");
+            }
+            else
+            {
+                animator.Play("Player_Walk");
+            }
+        }
+        else if (rb.linearVelocity.y > 0)
+        {
+            animator.Play("Player_Jump");
+        }
+        else
+        {
+            animator.Play("Player_Fall");
+        }
+    }  
 
     private void OnCollisionEnter2D(Collision2D col)
     {

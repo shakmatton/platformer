@@ -646,9 +646,9 @@ GameObject:
   - component: {fileID: 746532967}
   - component: {fileID: 746532969}
   - component: {fileID: 746532971}
-  - component: {fileID: 746532972}
   - component: {fileID: 746532973}
   - component: {fileID: 746532974}
+  - component: {fileID: 746532972}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -845,7 +845,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   jumpForce: 10
-  noChao: 0
 --- !u!70 &746532973
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
