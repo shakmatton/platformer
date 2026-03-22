@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class MovePlayer2D : MonoBehaviour
 {
@@ -14,12 +15,20 @@ public class MovePlayer2D : MonoBehaviour
 
     private bool noChao = false;
 
+    public int extraJumps = 1;      // configurável no Inspector
+    private int jumps;              // contador atual de pulos extras restantes
+    
+    public int health = 100;
+    private SpriteRenderer spriteRenderer;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         velocidadeAtual = speed;
+        jumps = extraJumps;
+        
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void OnMove(InputAction.CallbackContext ctx)
@@ -29,9 +38,20 @@ public class MovePlayer2D : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && noChao)
+        if (!ctx.performed) return;
+
+        if (noChao)
         {
+            // Pulo normal do chão — reseta o contador de extras
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            jumps = extraJumps;
+        }
+        else if (jumps > 0)
+        {
+            // Pulo extra no ar — consome um do contador
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f); // zera Y antes de aplicar a força
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            jumps--;
         }
     }
 
@@ -43,10 +63,14 @@ public class MovePlayer2D : MonoBehaviour
             velocidadeAtual = speed;
     }
 
+    private void Update()
+    {            
+        AtualizarAnimacao();
+    }
+    
     private void FixedUpdate()
     {
         rb.linearVelocity = new Vector2(movimentoX * velocidadeAtual, rb.linearVelocity.y);
-        AtualizarAnimacao();
     }
 
     private void AtualizarAnimacao()
@@ -54,17 +78,11 @@ public class MovePlayer2D : MonoBehaviour
         if (noChao)
         {
             if (movimentoX == 0)
-            {
                 animator.Play("Player_Idle");
-            }
-            else if (velocidadeAtual > speed)   // distingue andar de correr
-            {
+            else if (velocidadeAtual > speed)
                 animator.Play("Player_Run");
-            }
             else
-            {
                 animator.Play("Player_Walk");
-            }
         }
         else if (rb.linearVelocity.y > 0)
         {
@@ -74,12 +92,26 @@ public class MovePlayer2D : MonoBehaviour
         {
             animator.Play("Player_Fall");
         }
-    }  
+    }
 
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Chao"))
+        {
             noChao = true;
+            jumps = extraJumps; // reseta ao tocar o chão
+        }
+        
+        if (col.gameObject.CompareTag("Damage"))
+        {
+            health -= 25;
+            StartCoroutine(BlinkRed());
+            
+            if (health <= 0)
+            {
+                Die();
+            }
+        }
     }
 
     private void OnCollisionExit2D(Collision2D col)
@@ -87,4 +119,17 @@ public class MovePlayer2D : MonoBehaviour
         if (col.gameObject.CompareTag("Chao"))
             noChao = false;
     }
+    
+    private IEnumerator BlinkRed()
+    {
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = Color.white;
+    }
+
+    private void Die()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Platformer");
+    }
+    
 }
