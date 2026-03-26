@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using UnityEngine.UI;
 
 public class MovePlayer2D : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class MovePlayer2D : MonoBehaviour
     
     public int health = 100;
     private SpriteRenderer spriteRenderer;
+
+    public Image HealthImage;
 
     private void Start()
     {
@@ -65,7 +68,7 @@ public class MovePlayer2D : MonoBehaviour
 
     private void Update()
     {            
-        AtualizarAnimacao();
+        AtualizarAnimacao();        
     }
     
     private void FixedUpdate()
@@ -106,7 +109,8 @@ public class MovePlayer2D : MonoBehaviour
         {
             health -= 25;
             StartCoroutine(BlinkRed());
-            
+            HealthImage.fillAmount = health / 100f;
+
             if (health <= 0)
             {
                 Die();
