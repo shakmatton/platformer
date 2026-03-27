@@ -1,0 +1,37 @@
+# Unity
+*.cginc text
+*.cs diff=csharp text
+*.shader text
+
+# Unity YAML
+*.mat merge=unityyamlmerge eol=lf
+*.anim merge=unityyamlmerge eol=lf
+*.unity merge=unityyamlmerge eol=lf
+*.prefab merge=unityyamlmerge eol=lf
+*.physicsMaterial2D merge=unityyamlmerge eol=lf
+*.physicsMaterial merge=unityyamlmerge eol=lf
+*.asset merge=unityyamlmerge eol=lf
+*.meta merge=unityyamlmerge eol=lf
+*.controller merge=unityyamlmerge eol=lf
+
+# Binários — Git não tenta fazer diff/merge
+*.a binary
+*.apk binary
+*.aif binary
+*.aiff binary
+*.mp3 binary
+*.ogg binary
+*.wav binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.psd binary
+*.fbx binary
+*.obj binary
+*.pdf binary
+*.zip binary
+*.dll binary
+*.unitypackage binary
+*.so binary
+*.mp4 binary
