@@ -3,8 +3,10 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.UI;
 
-public class MovePlayer2D : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    public int coins;
+    
     private Rigidbody2D rb;
     private Animator animator;
 
