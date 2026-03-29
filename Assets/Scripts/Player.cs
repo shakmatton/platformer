@@ -69,17 +69,19 @@ public class Player : MonoBehaviour
     }
 
     private void Update()
-    {            
-        AtualizarAnimacao();        
-    }
-    
-    private void FixedUpdate()
     {
-        rb.linearVelocity = new Vector2(movimentoX * velocidadeAtual, rb.linearVelocity.y);
-    }
+        if (movimentoX != 0)
+        {
+            if (movimentoX > 0)
+            {
+                spriteRenderer.flipX = false;
+            }
+            else
+            {
+                spriteRenderer.flipX = true;
+            }
+        }
 
-    private void AtualizarAnimacao()
-    {
         if (noChao)
         {
             if (movimentoX == 0)
@@ -96,8 +98,19 @@ public class Player : MonoBehaviour
         else
         {
             animator.Play("Player_Fall");
-        }
+        }     
+
+        if (transform.position.y < -22)         // personagem morre se cair para além dessa distância vertical
+        {
+            Die();
+        }   
     }
+    
+    private void FixedUpdate()
+    {
+        rb.linearVelocity = new Vector2(movimentoX * velocidadeAtual, rb.linearVelocity.y);       
+    }
+
 
     private void OnCollisionEnter2D(Collision2D col)
     {
