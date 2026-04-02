@@ -24,7 +24,11 @@ public class Player : MonoBehaviour
     public int health = 100;
     private SpriteRenderer spriteRenderer;
 
-    public Image HealthImage;
+    private AudioSource audioSource;
+    public AudioClip jumpClip;
+    public AudioClip damageClip;
+
+    public Image healthImage;
 
     private void Start()
     {
@@ -34,6 +38,8 @@ public class Player : MonoBehaviour
         jumps = extraJumps;
         
         spriteRenderer = GetComponent<SpriteRenderer>();
+        
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void OnMove(InputAction.CallbackContext ctx)
@@ -50,6 +56,7 @@ public class Player : MonoBehaviour
             // Pulo normal do chão — reseta o contador de extras
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumps = extraJumps;
+            PlaySFX(jumpClip);
         }
         else if (jumps > 0)
         {
@@ -57,6 +64,7 @@ public class Player : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f); // zera Y antes de aplicar a força
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumps--;
+            PlaySFX(jumpClip);
         }
     }
 
@@ -122,9 +130,11 @@ public class Player : MonoBehaviour
         
         if (col.gameObject.CompareTag("Damage"))
         {
+            PlaySFX(damageClip);
             health -= 25;
             StartCoroutine(BlinkRed());
-            HealthImage.fillAmount = health / 100f;
+            healthImage.fillAmount = health / 100f;
+            
 
             if (health <= 0)
             {
@@ -149,6 +159,13 @@ public class Player : MonoBehaviour
     private void Die()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("Platformer");
+    }
+
+    public void PlaySFX(AudioClip audioClip, float volume = 1f)      // public allows this method to be seen and be used by other classes
+    {
+        audioSource.clip = audioClip;
+        audioSource.volume = volume;            // see class Coins (in Unity, drag your sound into coin prefab coin clip field)
+        audioSource.Play();
     }
     
 }
