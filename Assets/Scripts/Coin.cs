@@ -1,8 +1,15 @@
 using UnityEngine;
+using TMPro;
 
 public class Coin : MonoBehaviour
 {
     public AudioClip coinClip;
+    private TextMeshProUGUI coinText;            // since this is a prefab, we must use private instead of public
+
+    private void Start()
+    {
+        coinText = GameObject.FindWithTag("CoinText").GetComponent<TextMeshProUGUI>();     
+    }
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -12,6 +19,8 @@ public class Coin : MonoBehaviour
             player.coins += 1;
             
             player.PlaySFX(coinClip, 0.3f);
+            
+            coinText.text = player.coins.ToString();    // coins é do tipo int, e por isso, deve ser convertido pra tipo string. 
             
             Destroy(gameObject);
         }
