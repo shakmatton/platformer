@@ -5,6 +5,7 @@ public class Coin : MonoBehaviour
 {
     public AudioClip coinClip;
     private TextMeshProUGUI coinText;            // since this is a prefab, we must use private instead of public
+    public int coinsToGive = 1;
 
     private void Start()
     {
@@ -16,7 +17,7 @@ public class Coin : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             Player player = collision.gameObject.GetComponent<Player>();
-            player.coins += 1;
+            player.coins += coinsToGive;
             
             player.PlaySFX(coinClip, 0.3f);
             

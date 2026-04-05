@@ -167,5 +167,14 @@ public class Player : MonoBehaviour
         audioSource.volume = volume;            // see class Coins (in Unity, drag your sound into coin prefab coin clip field)
         audioSource.Play();
     }
-    
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "JumpPowerUp")
+        {
+            extraJumps = 5;
+            Destroy(collision.gameObject);
+        }
+    }    
 }
