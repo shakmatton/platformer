@@ -122,6 +122,17 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
+
+        Enemy enemy = col.gameObject.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            if (transform.position.y > enemy.transform.position.y + 0.3f)               // se altura do jogador for maior que altura do inimigo + 0.3f, player está mais acima do inimigo.
+            {
+                Destroy(enemy.gameObject);                                              // inimigo é destruído ao estilo Mario (jogador pula em cima do inimigo e mata ele)
+                return;                                                                 // sai do método sem processar os demais if's abaixo.
+            }
+        }
+
         if (col.gameObject.CompareTag("Chao"))
         {
             noChao = true;
@@ -173,7 +184,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "JumpPowerUp")
         {
-            extraJumps = 5;
+            extraJumps = 2;
             Destroy(collision.gameObject);
         }
     }    
