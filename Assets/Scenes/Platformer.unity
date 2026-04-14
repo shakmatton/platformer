@@ -2441,6 +2441,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 46dad2a5-c30d-4ab0-8d12-ed92b1e8e72d
     m_ActionName: 'Player/Sprint[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 746532972}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnFire
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7a1695d1-8d79-40b8-90a6-593a9d3be911
+    m_ActionName: 'Player/Fire[/Mouse/leftButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -2466,6 +2482,8 @@ MonoBehaviour:
   jumpClip: {fileID: 8300000, guid: 3907b9a66967648e0bd353f41fa2b1e5, type: 3}
   damageClip: {fileID: 8300000, guid: 3dc7d265f9c42437492a59228fc7b6d7, type: 3}
   healthImage: {fileID: 299289143}
+  bulletPrefab: {fileID: 8118103226651320496, guid: fc3c84793eb481d498856cd342938d04, type: 3}
+  fireRate: 0.3
 --- !u!70 &746532973
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

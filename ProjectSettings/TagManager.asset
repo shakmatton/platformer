@@ -8,6 +8,7 @@ TagManager:
   - Damage
   - CoinText
   - JumpPowerUp
+  - Bullet
   layers:
   - Default
   - TransparentFX

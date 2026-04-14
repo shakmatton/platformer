@@ -28,7 +28,14 @@ public class Player : MonoBehaviour
     public AudioClip jumpClip;
     public AudioClip damageClip;
 
-    public Image healthImage;
+    public Image healthImage;    
+
+    [Header("Shooting")]                    // configuração dos tiros dados pelo personagem (ver também função HandleShooting mais ao final do script)
+    public GameObject bulletPrefab;         // a bala em si
+    // public Vector3 firePoint;               // o local de onde o tiro sai
+    public float fireRate;                  // a taxa de repetição de tiros
+    private float fireTimer;                // o tempo de duração do tiro
+    private bool isFiring = false;          // ação de tiro desativada por padrão
 
     private void Start()
     {
@@ -76,6 +83,14 @@ public class Player : MonoBehaviour
             velocidadeAtual = speed;
     }
 
+    public void OnFire(InputAction.CallbackContext ctx)         // gerencia ação de tiro por botão pressionado (configurado em Input Actions)
+    {
+        if (ctx.performed)
+            isFiring = true;
+        else if (ctx.canceled)
+            isFiring = false;
+    }
+
     private void Update()
     {
         if (movimentoX != 0)
@@ -112,6 +127,17 @@ public class Player : MonoBehaviour
         {
             Die();
         }   
+
+        if (rb.linearVelocityY < 0)             // controla velocidade de queda do personagem mais realista
+        {
+            rb.gravityScale = 3f;
+        }
+        else
+        {
+            rb.gravityScale = 2f;
+        }
+
+        HandleShooting();                       // método de tiro chamado dentro de Update.
     }
     
     private void FixedUpdate()
@@ -188,4 +214,31 @@ public class Player : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }    
+
+    private void HandleShooting()                           // configura o método de atirar do personagem
+    {
+        fireTimer -= Time.deltaTime;
+
+        if (isFiring && fireTimer <= 0f)                    // permite novo tiro com o botão do mouse e somente depois do tempo de vida da última bala esgotar
+        {
+            Shoot();                                        // chama o método de tiro 
+            fireTimer = fireRate;                           // timer da bala atualizado por meio do tempo da taxa de tiro
+        }
+    }
+
+    private void Shoot()                                    // método de tiro: configura o objeto bala, com seu prefab, posição e rotação
+    {
+        GameObject bullet = Instantiate(bulletPrefab, transform.position /* + firePoint */, Quaternion.identity);       // gera o objeto bala com essas configurações
+
+        Bullet bulletScript = bullet.GetComponent<Bullet>();            //  bulletScript referencia o objeto bullet (bala)
+
+        if (spriteRenderer.flipX)                                       // configura direção do tiro, a partir da direção do personagem
+        {
+            bulletScript.setDirection(Vector2.left);
+        }
+        else
+        {
+            bulletScript.setDirection(Vector2.right);
+        }
+    }
 }
