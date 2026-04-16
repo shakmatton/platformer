@@ -2022,6 +2022,37 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!1 &575258195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 575258196}
+  m_Layer: 0
+  m_Name: 'WallSliding_Helper '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &575258196
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575258195}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.923, y: -1.17, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2474,6 +2505,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 016b6718fc5a284408d9933ad5c97bde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
   coins: 0
   speed: 5
   jumpForce: 10
@@ -2484,6 +2520,8 @@ MonoBehaviour:
   healthImage: {fileID: 299289143}
   bulletPrefab: {fileID: 8118103226651320496, guid: fc3c84793eb481d498856cd342938d04, type: 3}
   fireRate: 0.3
+  checkDistance: -1.93
+  wallSlideSpeed: 2
 --- !u!70 &746532973
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -5194,5 +5232,6 @@ SceneRoots:
   - {fileID: 21958349}
   - {fileID: 1090424073}
   - {fileID: 1823432926}
+  - {fileID: 575258196}
   - {fileID: 4246579636974817192}
   - {fileID: 1789989155}

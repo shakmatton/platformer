@@ -4,7 +4,17 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour
-{
+{    
+    public Transform groundCheck;
+    // Since groundCheck is not a sprite, lighting, effect, UI toolkit etc,
+    // it is just going to be transform.
+
+    public float groundCheckRadius = 0.2f;
+    // This checks how big the cirle that checks if you are touching the floor is.
+
+    public LayerMask groundLayer;
+    // A layer which is ground and public so you can layer ground objects "ground".    
+
     public int coins;
     
     private Rigidbody2D rb;
@@ -36,6 +46,12 @@ public class Player : MonoBehaviour
     public float fireRate;                  // a taxa de repetição de tiros
     private float fireTimer;                // o tempo de duração do tiro
     private bool isFiring = false;          // ação de tiro desativada por padrão
+
+    [Header("Wall Sliding")]
+    public float checkDistance = 0.3f;  // 0.45f
+    public float wallSlideSpeed = 2f;
+    private bool isTouchingWall;
+    private bool isWallSliding;
 
     private void Start()
     {
@@ -114,35 +130,45 @@ public class Player : MonoBehaviour
             else
                 animator.Play("Player_Walk");
         }
-        else if (rb.linearVelocity.y > 0)
-        {
-            animator.Play("Player_Jump");
-        }
         else
         {
-            animator.Play("Player_Fall");
-        }     
+            if (isWallSliding)                              // animação do player escorregando pela parede (estilo MegaMan X).
+            {
+                animator.Play("Player_WallSlide");
+            }
+            else if (rb.linearVelocity.y > 0)
+                {
+                    animator.Play("Player_Jump");
+                }
+                else
+                {
+                    animator.Play("Player_Fall");
+                }
 
-        if (transform.position.y < -22)         // personagem morre se cair para além dessa distância vertical
-        {
-            Die();
-        }   
+            if (transform.position.y < -22)         // personagem morre se cair para além dessa distância vertical
+            {
+                Die();
+            }
 
-        if (rb.linearVelocityY < 0)             // controla velocidade de queda do personagem mais realista
-        {
-            rb.gravityScale = 3f;
+            if (rb.linearVelocityY < 0)             // controla velocidade de queda do personagem mais realista
+            {
+                rb.gravityScale = 3f;
+            }
+            else
+            {
+                rb.gravityScale = 2f;
+            }
+
+            HandleWallSlide(movimentoX);             // método que gerencia o escorregar do personagem pela parede (estilo MegaMan X)
         }
-        else
-        {
-            rb.gravityScale = 2f;
-        }
-
+        
         HandleShooting();                       // método de tiro chamado dentro de Update.
     }
     
     private void FixedUpdate()
     {
-        rb.linearVelocity = new Vector2(movimentoX * velocidadeAtual, rb.linearVelocity.y);       
+        rb.linearVelocity = new Vector2(movimentoX * velocidadeAtual, rb.linearVelocity.y);
+        isTouchingWall = Physics2D.Raycast(transform.position, spriteRenderer.flipX ? Vector2.left : Vector2.right, checkDistance, groundLayer);
     }
 
 
@@ -172,7 +198,6 @@ public class Player : MonoBehaviour
             StartCoroutine(BlinkRed());
             healthImage.fillAmount = health / 100f;
             
-
             if (health <= 0)
             {
                 Die();
@@ -239,6 +264,19 @@ public class Player : MonoBehaviour
         else
         {
             bulletScript.setDirection(Vector2.right);
+        }
+    }
+
+    private void HandleWallSlide(float movementoX)                                           // método que gerencia o escorregar do personagem pela parede (estilo MegaMan X)
+    {
+        if (isTouchingWall && !noChao && movementoX != 0 && rb.linearVelocityY < 0)
+        {
+            isWallSliding = true;
+            rb.linearVelocityY = -wallSlideSpeed;
+        }
+        else
+        {
+            isWallSliding = false;
         }
     }
 }
