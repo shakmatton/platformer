@@ -220,7 +220,7 @@ public class Player : MonoBehaviour
 
     private void Die()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Platformer");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 
     public void PlaySFX(AudioClip audioClip, float volume = 1f)      // public allows this method to be seen and be used by other classes
