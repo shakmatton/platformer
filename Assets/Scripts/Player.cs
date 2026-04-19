@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
     public float checkDistance = 0.3f;  // 0.45f
     public float wallSlideSpeed = 2f;
     private bool isTouchingWall;
-    private bool isWallSliding;
+    private bool isWallSliding;    
 
     private void Start()
     {
@@ -67,11 +67,24 @@ public class Player : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return; // ignora input enquanto pausado
+
+        /* A linha acima deve ser aplicada em métodos como OnMove, OnJump, OnSprint, OnFire (e qualquer outro On... de gameplay):
+
+        Problema: inputs de gameplay executavam durante pause e telas de fim de fase
+
+        Explicação: o Input System processa inputs independentemente do estado do jogo. Sem essa guarda, ações como mover, pular e atirar continuavam sendo registradas
+        mesmo com Time.timeScale == 0, causando comportamentos indevidos: o player mudava de direção, emitia som de pulo e atirava ao clicar em botões de UI pausada.
+        
+        Solução: a verificação mais acima bloqueia qualquer input de gameplay enquanto o tempo estiver parado.        */
+
         movimentoX = ctx.ReadValue<float>();
     }
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return; // ignora input enquanto pausado
+
         if (!ctx.performed) return;
 
         if (noChao)
@@ -93,6 +106,8 @@ public class Player : MonoBehaviour
 
     public void OnSprint(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return; // ignora input enquanto pausado
+
         if (ctx.performed)
             velocidadeAtual = speed * 2f;
         else if (ctx.canceled)
@@ -101,6 +116,8 @@ public class Player : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext ctx)         // gerencia ação de tiro por botão pressionado (configurado em Input Actions)
     {
+        if (Time.timeScale == 0) return; // ignora input enquanto pausado
+
         if (ctx.performed)
             isFiring = true;
         else if (ctx.canceled)
