@@ -220,6 +220,11 @@ public class Player : MonoBehaviour
                 Die();
             }
         }
+
+        if (col.gameObject.CompareTag("BouncePad"))
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 2f);
+        }
     }
 
     private void OnCollisionExit2D(Collision2D col)
@@ -253,6 +258,18 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "JumpPowerUp")
         {
             extraJumps = 2;
+            Destroy(collision.gameObject);
+        }
+
+        else if (collision.gameObject.tag == "Life")
+        {
+            health += 50;
+            if (health > 100)
+            {
+                health = 100;
+            }
+            healthImage.fillAmount = health / 100f;
+
             Destroy(collision.gameObject);
         }
     }    

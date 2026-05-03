@@ -9,6 +9,8 @@ TagManager:
   - CoinText
   - JumpPowerUp
   - Bullet
+  - BouncePad
+  - Life
   layers:
   - Default
   - TransparentFX
