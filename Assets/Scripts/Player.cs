@@ -55,6 +55,9 @@ public class Player : MonoBehaviour
 
     [HideInInspector] public float currentBeltSpeed = 0f;    // velocidade da esteira (ConveyorBelt) quando o player toca ou sai dela
                                                              // uso do [HideInInspector] para evitar que atributos de objetos externos que não pertencem ao player apareçam nele.
+                                                                 
+    public bool speedBoost;               // variável ligada ao script SpeedPad.cs
+    public float speedPadForce = 8f;      // força lateral aplicada enquanto speedBoost estiver ativo
 
     private void Start()
     {
@@ -184,11 +187,40 @@ public class Player : MonoBehaviour
         
         HandleShooting();                       // método de tiro chamado dentro de Update.
     }
-        
+
+    /*
     private void FixedUpdate()
     {
-        rb.linearVelocity = new Vector2(movimentoX * velocidadeAtual + currentBeltSpeed, rb.linearVelocity.y);                                          // currentBeltSpeed, caso o player pise numa esteira
-        isTouchingWall = Physics2D.Raycast(transform.position, spriteRenderer.flipX ? Vector2.left : Vector2.right, checkDistance, groundLayer);
+        float x = rb.linearVelocity.x;
+
+        if (noChao)
+        {
+            x = movimentoX * velocidadeAtual + currentBeltSpeed;
+        }
+        else if (movimentoX != 0f)
+        {
+            x = movimentoX * velocidadeAtual + currentBeltSpeed;
+        }
+
+        rb.linearVelocity = new Vector2(x, rb.linearVelocity.y);
+
+        if (!speedBoost)
+        {
+            isTouchingWall = Physics2D.Raycast(transform.position, spriteRenderer.flipX ? Vector2.left : Vector2.right, checkDistance, groundLayer);
+        }
+    }*/
+
+    private void FixedUpdate()
+    {
+        rb.linearVelocity = new Vector2(
+            movimentoX * velocidadeAtual + currentBeltSpeed + (speedBoost ? speedPadForce : 0f),
+            rb.linearVelocity.y
+        );
+
+        if (!speedBoost)
+        {
+            isTouchingWall = Physics2D.Raycast(transform.position, spriteRenderer.flipX ? Vector2.left : Vector2.right, checkDistance, groundLayer);
+        }
     }
 
 
