@@ -80,6 +80,7 @@ Disponibilizar o projeto **Labirinto Plus** usado nas aulas, permitindo que os a
 | --- | --- |
 | **Antonio Marcos** | Professor Coordenador do projeto |
 | **Ricardo Krauskopf** | Professor Coordenador do projeto |
+| **Camile Bordini** | Professora Coordenadora do projeto |
 
 ---
 
