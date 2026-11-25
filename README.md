@@ -44,9 +44,7 @@ Disponibilizar o projeto **Labirinto Plus** usado nas aulas, permitindo que os a
 
 ### Disponível para testar no Unity
 
-| Projeto | Status | Link |
-| --- | --- | --- |
-| **Platformer (versão experimental)** 
+**Platformer (versão experimental)** 
 
 ### Em Desenvolvimento
 
